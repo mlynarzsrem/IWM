@@ -8,9 +8,11 @@ fileLoader = FileLoader("data/orginal", "data/result")
 if __name__ =="__main__":
     files =  fileLoader.getFilePairs()
     samples = []
+    print("Sample extracting")
     for file in files:
         sampleExtracter = SampleExtracter(file[0],file[1],10)
-        samples.append(sampleExtracter.getSamples())
+        samples+=sampleExtracter.getSamples()
+    print("Preprocessing")
     p = Preprocessor(samples)
     samples = p.getTrainingData()
     c =Classifier(samples[:10000],10)
