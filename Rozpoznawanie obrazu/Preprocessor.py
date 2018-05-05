@@ -6,7 +6,7 @@ class Preprocessor:
         self.samples =samples
         self.positive =[s for s in samples if s.getDecisiom()==1]
         self.negative = [s for s in samples if s.getDecisiom() == 0]
-        if(len(self.positive)==0 or  len(self.negative)==1):
+        if(len(self.positive)==0 or  len(self.negative)==0):
             raise "Wrong data"
     def getTrainingData(self):
         minSet = min(len(self.positive),len(self.negative))

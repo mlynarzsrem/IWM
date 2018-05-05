@@ -1,11 +1,11 @@
 import numpy as np
 class Sample:
-    def __init__(self,data,dectison):
+    def __init__(self,data,decision):
         self.data = data
-        self.decysion = dectison
+        self.decision = decision
     def getData(self):
         return self.data
     def getDecisiom(self):
-        return self.decysion
+        return self.decision
     def __str__(self):
-        return str((self.data,self.decysion))
+        return str((self.data,self.decision))
