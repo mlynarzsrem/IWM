@@ -17,7 +17,8 @@ if __name__ =="__main__":
 
 
     image = cv2.imread("data/orginal/im0001.jpg",0)
-    output = c.extractBloodVessels(image,True)
+    output = c.extractBloodVessels2(image,True)
+    print(output)
     cv2.imshow("input", image)
     cv2.imshow("output",output)
     cv2.waitKey(0)

@@ -51,6 +51,38 @@ class Classifier:
                     cv2.waitKey(0)
                     cv2.destroyAllWindows()
         return outputImage
+
+    def getScore(self,cord):
+        x = int(cord[0])
+        y = int(cord[1])
+        sizeOst = (2 * self.size + 1) * (2 * self.size + 1)
+        try:
+            frame = self.inputImage[x - self.size:x + self.size + 1, y - self.size:y + self.size + 1].flatten()
+            if (frame.shape[0] == sizeOst):
+                data = frame
+            else:
+                lenght = frame.shape[0]
+                diff = sizeOst - lenght
+                data = np.append(np.zeros(diff), frame).flatten()
+        except:
+            return 0
+        data = data.reshape(1, -1)
+        score = self.model.predict(data)
+        #print(data)
+        #print(score)
+        return score * 255
+    def extractBloodVessels2(self, inputImage, online=False):
+        print("Start ")
+        self.inputImage = inputImage
+        x, y = inputImage.shape
+        cords =np.empty(shape=(x,y),dtype='2f')
+        for i in range(x):
+            for j in range(y):
+                cords[i,j]=tuple((i,j))
+        listOfRows = []
+        for row in cords:
+            listOfRows.append(np.array(list(map(self.getScore,row))))
+        return np.array(listOfRows)
     def convertData(self,data):
         xShape =len(data)
         yShape = data[0].shape[0]
