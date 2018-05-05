@@ -2,10 +2,10 @@ from SampleExtracter import SampleExtracter
 from FileLoader import FileLoader
 from Preprocessor import Preprocessor
 from Classifier import Classifier
-
 import cv2
-fileLoader = FileLoader("data/orginal", "data/result")
-if __name__ =="__main__":
+from os import listdir
+def train():
+    fileLoader = FileLoader("data/orginal", "data/result")
     files =  fileLoader.getFilePairs()
     samples = []
     print("Sample extracting")
@@ -15,13 +15,24 @@ if __name__ =="__main__":
     print("Preprocessing")
     p = Preprocessor(samples)
     samples = p.getTrainingData()
-    c =Classifier(samples[:10000],10)
+    c =Classifier(samples[:100000],10)
 
 
-    image = cv2.imread("data/orginal/im0001.jpg",0)
+def test():
+    c = Classifier(None, 10)
+    image = cv2.imread("data/orginal/im0002.jpg",0)
     output = c.extractBloodVessels2(image,True)
-    print(output)
     cv2.imshow("input", image)
     cv2.imshow("output",output)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+def calculations():
+    c = Classifier(None, 10)
+    dir = "data/orginal"
+    for f in listdir(dir):
+        image = cv2.imread(dir+"/"+f, 0)
+        output = c.extractBloodVessels2(image, True)
+        cv2.imwrite("results/"+f,output)
+
+if __name__ =="__main__":
+    calculations()
