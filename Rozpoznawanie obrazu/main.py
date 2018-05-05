@@ -6,11 +6,11 @@ from Classifier import Classifier
 import cv2
 fileLoader = FileLoader("data/orginal", "data/result")
 if __name__ =="__main__":
-    files = []
-    for f in fileLoader.getFilePairs():
-        files+=f
-    sampleExtracter = SampleExtracter(files[0],files[1],10)
-    samples =  sampleExtracter.getSamples()
+    files =  fileLoader.getFilePairs()
+    samples = []
+    for file in files:
+        sampleExtracter = SampleExtracter(file[0],file[1],10)
+        samples.append(sampleExtracter.getSamples())
     p = Preprocessor(samples)
     samples = p.getTrainingData()
     c =Classifier(samples[:10000],10)
