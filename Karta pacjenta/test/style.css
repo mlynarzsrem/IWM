@@ -1,0 +1,22 @@
+body {
+  background-color: #fff2e6; 
+  
+}
+.patient{
+    clear: both;
+}
+
+.patientId{
+    padding: 10px;
+    float: left;
+    color: red;
+}
+.dateOfBirth{
+    padding: 10px;
+    float: left;
+    color: red;
+}
+.btnLink{
+    padding: 10px;
+    float: left;    
+}

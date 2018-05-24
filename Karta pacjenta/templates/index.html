@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  </head>
+
+  <body id="page-top">
+    {{  searchbar}}
+    {{ changer }}
+    {{ cSelector }}
+    <select name="count" form="countSelector">
+        <option value=10>10</option>
+        <option value=20>20</option>
+        <option selected="selected" value=30>30</option>
+        <option value=40>40</option>
+        <option value=50>50</option>
+    </select>
+    <table style="width:60%">
+        <tr>
+            <th>Nazwisko</th>
+            <th>ID pacjenta</th>
+            <th>Data urodzenia</th>
+            <th>Płeć</th>
+            <th>Aktywny</th>
+            <th></th>
+        </tr >
+        {{  list}}
+    </table>
+  </body>
+
+</html>
