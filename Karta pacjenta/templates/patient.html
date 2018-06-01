@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+  </head>
+
+  <body id="someRandomID">
+    <table id="patientInfo" style="width:100%">
+        <tr>
+            <th>identifier</th>
+            <th>active</th>
+            <th>name</th>
+            <th>telecom</th>
+            <th>gender</th>
+			<th>birthDate</th>
+            <th>deceased</th>
+            <th>address</th>
+            <th>maritalStatus</th>
+        </tr >
+
+            {{  patientinfo }}
+    </table>
+
+	<br>
+    Meditcation statements
+    <br>
+    {{ medButton }}
+    <br><br>
+<div>
+	
+	    <table id="rest" style="float: left; width:40%">
+        <tr>
+            <th>date</th>
+            <th>type</th>
+            <th>button here</th>
+        </tr >
+            {{  timeline }}
+    </table>
+	</div>
+  </body>
+
+</html>

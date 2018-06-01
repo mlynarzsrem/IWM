@@ -1,25 +1,29 @@
-from fhirclient import client
-import fhirclient.models.patient as p
 import urllib.request
 import json
-import fhirclient.models.medicationstatement as medSt
-import fhirclient.models.observation as obs
-import fhirclient.models.medication as med
 import fhirclient.models.bundle as b
+import fhirclient.models.patient as p
+import fhirclient.models.observation as o
+import fhirclient.models.medicationstatement as ms
 class Client:
-    def __init__(self):
-        self.settings = {
-            'app_id': 'my_web_app',
-            'api_base': 'http://hapi.fhir.org/baseDstu3'
-        }
-        self.smart = client.FHIRClient(settings=self.settings)
 
     def getPatientById(self,id):
-        patient =  p.Patient.read(str(id),self.smart)
-        return patient
+        url ="http://hapi.fhir.org/baseDstu3/Patient/"+str(id)
+        contents = urllib.request.urlopen(url).read()
+        js = json.loads(contents.decode("utf-8"))
+        return p.Patient(js)
+    def getObservationById(self,id):
+        url ="http://hapi.fhir.org/baseDstu3/Observation/"+str(id)
+        contents = urllib.request.urlopen(url).read()
+        js = json.loads(contents.decode("utf-8"))
+        return o.Observation(js)
+    def getMedicationStatement(self,id):
+        url ="http://hapi.fhir.org/baseDstu3/MedicationStatement/"+str(id)
+        contents = urllib.request.urlopen(url).read()
+        js = json.loads(contents.decode("utf-8"))
+        return ms.MedicationStatement(js)
     def getAllPatients(self,count=7,offset=3,family=""):
-        contents = urllib.request.urlopen("http://hapi.fhir.org/baseDstu3/Patient?family="+str(family)+"&_getpagesoffset="+str(offset)+"&_count="+str(count)+"&_pretty=true").read()
-        js = json.loads(contents)
+        contents = urllib.request.urlopen("http://hapi.fhir.org/baseDstu3/Patient?family=" + str(family) + "&_getpagesoffset=" + str(offset) + "&_count=" + str(count) + "&_pretty=true").read()
+        js = json.loads(contents.decode("utf-8"))
         bundle = b.Bundle(js)
         patients = []
         if(bundle.entry is None):
@@ -27,4 +31,14 @@ class Client:
         for entry in bundle.entry:
             patients.append(entry.resource)
         return patients
-
+    def getItemsForPatient(self,id,what="MedicationStatement"):
+        url ="http://hapi.fhir.org/baseDstu3/"+what+"?patient="+str(id)+"&_pretty=true"
+        contents = urllib.request.urlopen(url).read()
+        js = json.loads(contents.decode("utf-8"))
+        bundle = b.Bundle(js)
+        items =[ ]
+        if(bundle.entry is None):
+            return []
+        for entry in bundle.entry:
+            items.append(entry.resource)
+        return items

@@ -25,6 +25,22 @@ def getAllPatients():
 
 @app.route('/patient/<id>')
 def getPatientData(id):
-    return ''
+    patient = client.getPatientById(id)
+    obs = client.getItemsForPatient(id=id,what="Observation")
+    patientinfo ,timeline,button= view.getPatientView(patient,obs=obs)
+    return render_template('patient.html',patientinfo=Markup(patientinfo),timeline = Markup(timeline),medButton =Markup(button))
+
+@app.route('/observation/<id>')
+def getObservation(id):
+    obs = client.getObservationById(id)
+    obsRow = view.getObservationView(obs)
+    return render_template('observation.html',observationInfo=Markup(obsRow))
+
+@app.route('/medstate/<id>')
+def getMedicationStatementOfPatiens(id):
+    meds = client.getItemsForPatient(id=id, what="MedicationStatement")
+    medRow = view.getMedicationView(meds)
+    return render_template('medicationstatement.html',medinfo=Markup(medRow))
+
 if __name__ == '__main__':
     app.run()
