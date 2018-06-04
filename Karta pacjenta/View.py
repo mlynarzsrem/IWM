@@ -1,4 +1,6 @@
 from DataExtracter import MyPatient,MyObservation,MyMedicationStatement
+from datetime import datetime
+import pytz
 class View:
     def getAllPatientsView(self,patients,count,offset,name=None):
         patientsList=''
@@ -46,20 +48,28 @@ class View:
         return form
 
 
-    def getTimeline(self,items):
+    def getTimeline(self,items,dateStart,dateEnd):
+        if(dateStart is not None):
+            utc = pytz.UTC
+            dateStart = datetime.strptime(dateStart, '%Y-%m-%d')
+            dateStart = utc.localize(dateStart)
+            dateEnd = datetime.strptime(dateEnd, '%Y-%m-%d')
+            dateEnd = utc.localize(dateEnd)
         timeline=''
         for it in items:
+            if(dateStart is not None and (it.date < dateStart or it.date>dateEnd)):
+                continue
             itType = it.type
             link = it.link
             date =it.dateRow
             button = '<td><a href="' + str(link) + '"><button>View data</button></a></td>'
             timeline+="<tr>"+date+itType+button+"</tr>\n"
         return timeline
-    def getPatientView(self,patient,obs):
+    def getPatientView(self,patient,obs,dateStart=None,dateEnd=None):
         patientInfo = self.getSinglePatientRow(patient,True)
         myObs = [MyObservation(o) for o in obs]
         button = '<td><a href="/medstate/' + str(patient.id) + '"><button>View data</button></a></td>'
-        return patientInfo,self.getTimeline(myObs),button
+        return patientInfo,self.getTimeline(myObs,dateStart,dateEnd),button,self.getDateFilter(patient.id,dateStart,dateEnd)
 
     def getObservationView(self,observation):
         obs = MyObservation(observation)
@@ -71,3 +81,12 @@ class View:
         for myMed in myMeds:
             table+="<tr>"+myMed.id+myMed.status+myMed.code+myMed.dosage+myMed.value+myMed.unit+myMed.taken+"</tr>\n"
         return table
+
+    def getDateFilter(self,id,dateStart=None,dateEnd=None):
+        text=' Filter date:  \n \
+        <form action="/patient-filter/'+str(id)+'">\n \
+        Date from: <input id="date" type="date" name="begdate" value='+str(dateStart)+'><br> \n \
+        Date to:<input id="date" type="date" name="enddate" value='+str(dateEnd)+'><br>\n \
+        <input type="submit"> \n \
+        </form>\n '
+        return text

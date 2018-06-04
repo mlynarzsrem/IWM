@@ -27,9 +27,17 @@ def getAllPatients():
 def getPatientData(id):
     patient = client.getPatientById(id)
     obs = client.getItemsForPatient(id=id,what="Observation")
-    patientinfo ,timeline,button= view.getPatientView(patient,obs=obs)
-    return render_template('patient.html',patientinfo=Markup(patientinfo),timeline = Markup(timeline),medButton =Markup(button))
+    patientinfo ,timeline,button,datafilter= view.getPatientView(patient,obs=obs)
+    return render_template('patient.html',patientinfo=Markup(patientinfo),timeline = Markup(timeline),medButton =Markup(button),datefilter=Markup(datafilter))
 
+@app.route('/patient-filter/<id>')
+def getPatientFilteredData(id):
+    datestart = request.args.get("begdate")
+    dateend = request.args.get("enddate")
+    patient = client.getPatientById(id)
+    obs = client.getItemsForPatient(id=id,what="Observation")
+    patientinfo ,timeline,button,datafilter= view.getPatientView(patient,obs=obs,dateStart=datestart,dateEnd=dateend)
+    return render_template('patient.html',patientinfo=Markup(patientinfo),timeline = Markup(timeline),medButton =Markup(button),datefilter=Markup(datafilter))
 @app.route('/observation/<id>')
 def getObservation(id):
     obs = client.getObservationById(id)
